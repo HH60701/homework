@@ -1,35 +1,23 @@
-const int ledPin = 2;
+const int ledPin = 2;        
+bool ledState = LOW;         
+unsigned long previousMillis = 0;
+const unsigned long interval = 500;  
 
 void setup() {
   Serial.begin(115200);
   pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, ledState);
 }
 
 void loop() {
-  Serial.println("S: 短闪3次");
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(ledPin, HIGH);
-    delay(200);
-    digitalWrite(ledPin, LOW);
-    delay(200);
-  }
-  delay(500); 
+  unsigned long currentMillis = millis();
 
-  Serial.println("O: 长闪3次");
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(ledPin, HIGH);
-    delay(600);
-    digitalWrite(ledPin, LOW);
-    delay(200);
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;   
+    ledState = !ledState;            
+    digitalWrite(ledPin, ledState);
+    
+    Serial.println(ledState ? "LED ON" : "LED OFF");
   }
-  delay(500);  
 
-  Serial.println("S: 短闪3次");
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(ledPin, HIGH);
-    delay(200);
-    digitalWrite(ledPin, LOW);
-    delay(200);
-  }
-  delay(2000); 
 }
